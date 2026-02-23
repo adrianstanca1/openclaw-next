@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist-cli",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": false
+  },
+  "include": [
+    "src/core",
+    "src/agents",
+    "src/memory",
+    "src/tools",
+    "src/skills",
+    "src/plugins",
+    "src/presets",
+    "src/cli"
+  ],
+  "exclude": [
+    "src/ui",
+    "src/views",
+    "src/main.tsx",
+    "node_modules"
+  ]
+}

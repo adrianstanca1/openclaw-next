@@ -1,0 +1,11 @@
+
+project_name: "New Project"
+last_updated: "2026-02-23T03:09:24.120Z"
+goals:
+  - "Initialize project structure"
+tasks:
+  - id: "init-001"
+    status: "todo"
+    owner: "system"
+    description: "Setup initial project files"
+    priority: "high"
