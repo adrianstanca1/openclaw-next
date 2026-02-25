@@ -44,7 +44,8 @@ export const TraceVisualization: React.FC<TraceVisualizationProps> = ({
             }`}>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${getStepTypeColor(step.type)}`}>
+                  <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded flex items-center gap-1 ${getStepTypeColor(step.type)}`}>
+                    <span>{getStepIcon(step.type)}</span>
                     {step.type}
                   </span>
                   <span className="text-xs text-[var(--color-text-muted)]">
@@ -78,6 +79,21 @@ export const TraceVisualization: React.FC<TraceVisualizationProps> = ({
       </div>
     </div>
   );
+};
+
+const getStepIcon = (type: string): string => {
+  switch (type) {
+    case 'plan': return '📋';
+    case 'analysis': return '🔍';
+    case 'decision': return '⚖️';
+    case 'execution': return '⚡';
+    case 'observation': return '👁️';
+    case 'reflection': return '🤔';
+    case 'delegation': return '🤝';
+    case 'learning': return '🧠';
+    case 'synthesis': return '🧪';
+    default: return '📍';
+  }
 };
 
 const getStepTypeColor = (type: string): string => {

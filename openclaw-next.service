@@ -1,0 +1,19 @@
+[Unit]
+Description=OpenClaw Next - Agentic Gateway Control Panel
+After=network.target
+
+[Service]
+Type=simple
+User=openclaw
+WorkingDirectory=/opt/openclaw-next
+Environment=NODE_ENV=production
+EnvironmentFile=/opt/openclaw-next/.env
+ExecStart=/usr/bin/node /opt/openclaw-next/dist-cli/cli/index.js serve
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=openclaw-next
+
+[Install]
+WantedBy=multi-user.target

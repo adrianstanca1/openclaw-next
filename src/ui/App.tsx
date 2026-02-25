@@ -1,15 +1,26 @@
 // OpenClaw Next - Main App Component
 // Root application component with routing and state management
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { SetupWizard } from './components/SetupWizard.js';
-import { DashboardLayout } from './components/DashboardLayout.js';
-import { AgentDashboard } from '../views/AgentDashboard.js';
-import { ToolsView } from '../views/ToolsView.js';
-import { PluginsView } from '../views/PluginsView.js';
-import { SkillsView } from '../views/SkillsView.js';
-import { configManager } from '../core/config.js';
-import type { ViewState } from './types.js';
+import React, { useState, useEffect, useCallback } from "react";
+import { configManager } from "../core/config.js";
+import { AgentDashboard } from "../views/AgentDashboard.js";
+import { GovernanceDashboard } from "../views/governance/GovernanceDashboard.js";
+import { PluginsView } from "../views/PluginsView.js";
+import { SessionsView } from "../views/SessionsView.js";
+import { SkillsView } from "../views/SkillsView.js";
+import { ToolsView } from "../views/ToolsView.js";
+import { DashboardLayout } from "./components/DashboardLayout.js";
+import { SetupWizard } from "./components/SetupWizard.js";
+import { ApiKeys } from "./pages/governance/ApiKeys.js";
+import { Approvals } from "./pages/governance/Approvals.js";
+import { Audit } from "./pages/governance/Audit.js";
+import { Gateways } from "./pages/governance/Gateways.js";
+import { Policies } from "./pages/governance/Policies.js";
+import { Settings } from "./pages/governance/Settings.js";
+import { Tasks } from "./pages/governance/Tasks.js";
+import { Teams } from "./pages/governance/Teams.js";
+import { Webhooks } from "./pages/governance/Webhooks.js";
+import type { ViewState } from "./types.js";
 
 /**
  * Main App Component
@@ -17,7 +28,7 @@ import type { ViewState } from './types.js';
 export const App: React.FC = () => {
   const [isSetupComplete, setIsSetupComplete] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [currentView, setCurrentView] = useState<ViewState>('dashboard');
+  const [currentView, setCurrentView] = useState<ViewState>("dashboard");
   const [error, setError] = useState<string | null>(null);
 
   // Check if setup is complete on mount
@@ -30,7 +41,7 @@ export const App: React.FC = () => {
         const hasRequiredConfig = config.ollama?.local?.endpoint || config.ollama?.cloud?.enabled;
         setIsSetupComplete(Boolean(hasRequiredConfig && config.ollama?.enabled));
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to initialize app');
+        setError(err instanceof Error ? err.message : "Failed to initialize app");
       } finally {
         setIsLoading(false);
       }
@@ -52,48 +63,100 @@ export const App: React.FC = () => {
   // Render current view
   const renderView = () => {
     switch (currentView) {
-      case 'agents':
+      case "dashboard":
+      case "governance":
+        return <GovernanceDashboard />;
+      case "agents":
         return <AgentDashboard />;
-      case 'delegation':
-        return <div className="p-8"><h2 className="text-2xl font-bold text-white">Delegation</h2><p className="text-slate-400 mt-2">Use the mobile app for task delegation.</p></div>;
-      case 'tools':
+      case "sessions":
+        return <SessionsView />;
+      case "delegation":
+        return (
+          <div className="p-8">
+            <h2 className="text-2xl font-bold text-white">Delegation</h2>
+            <p className="text-slate-400 mt-2">Use the mobile app for task delegation.</p>
+          </div>
+        );
+      case "tools":
         return <ToolsView />;
-      case 'plugins':
+      case "plugins":
         return <PluginsView />;
-      case 'skills':
+      case "skills":
         return <SkillsView />;
-      case 'dashboard':
+      case "teams":
+        return <Teams />;
+      case "tasks":
+        return <Tasks />;
+      case "approvals":
+        return <Approvals />;
+      case "webhooks":
+        return <Webhooks />;
+      case "apiKeys":
+        return <ApiKeys />;
+      case "policies":
+        return <Policies />;
+      case "gateways":
+        return <Gateways />;
+      case "audit":
+        return <Audit />;
+      case "settings":
+        return <Settings />;
       default:
         return (
           <div className="p-8">
             <h1 className="text-3xl font-bold mb-6">Welcome to OpenClaw Next</h1>
             <p className="text-[var(--color-text-muted)] mb-8">
-              Your agentic gateway control center. Use the sidebar to navigate to different sections.
+              Your agentic gateway control center. Use the sidebar to navigate to different
+              sections.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <QuickLinkCard
                 title="Agents"
                 description="Manage your AI agents"
                 icon="🤖"
-                onClick={() => handleNavigate('agents')}
+                onClick={() => handleNavigate("agents")}
+              />
+              <QuickLinkCard
+                title="Governance"
+                description="System governance and oversight"
+                icon="⚖️"
+                onClick={() => handleNavigate("governance")}
+              />
+              <QuickLinkCard
+                title="Teams"
+                description="Manage teams and organizations"
+                icon="👥"
+                onClick={() => handleNavigate("teams")}
               />
               <QuickLinkCard
                 title="Tools"
                 description="Configure available tools"
                 icon="🛠️"
-                onClick={() => handleNavigate('tools')}
+                onClick={() => handleNavigate("tools")}
               />
               <QuickLinkCard
                 title="Plugins"
                 description="Manage system plugins"
                 icon="🔌"
-                onClick={() => handleNavigate('plugins')}
+                onClick={() => handleNavigate("plugins")}
               />
               <QuickLinkCard
                 title="Skills"
                 description="Browse and install skills"
                 icon="✨"
-                onClick={() => handleNavigate('skills')}
+                onClick={() => handleNavigate("skills")}
+              />
+              <QuickLinkCard
+                title="Gateways"
+                description="Manage gateway servers"
+                icon="🌐"
+                onClick={() => handleNavigate("gateways")}
+              />
+              <QuickLinkCard
+                title="Audit Log"
+                description="View system audit logs"
+                icon="📜"
+                onClick={() => handleNavigate("audit")}
               />
             </div>
           </div>
@@ -121,10 +184,7 @@ export const App: React.FC = () => {
           <div className="text-6xl mb-4">⚠️</div>
           <h2 className="text-xl font-bold mb-2 text-[var(--color-error)]">Initialization Error</h2>
           <p className="text-[var(--color-text-muted)] mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="btn-primary"
-          >
+          <button onClick={() => window.location.reload()} className="btn-primary">
             Retry
           </button>
         </div>
@@ -160,10 +220,7 @@ interface QuickLinkCardProps {
 }
 
 const QuickLinkCard: React.FC<QuickLinkCardProps> = ({ title, description, icon, onClick }) => (
-  <button
-    onClick={onClick}
-    className="card-hover text-left group"
-  >
+  <button onClick={onClick} className="card-hover text-left group">
     <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-200">
       {icon}
     </div>

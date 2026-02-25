@@ -190,7 +190,16 @@ export type ViewState =
   | 'skills'
   | 'settings'
   | 'marketplace'
-  | 'delegation';
+  | 'delegation'
+  | 'governance'
+  | 'audit'
+  | 'policies'
+  | 'teams'
+  | 'webhooks'
+  | 'tasks'
+  | 'approvals'
+  | 'gateways'
+  | 'apiKeys';
 
 /**
  * Subagent Information
