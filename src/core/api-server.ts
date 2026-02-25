@@ -999,7 +999,7 @@ export class SmartApiServer extends EventEmitter {
 
       // Start listening
       await new Promise<void>((resolve) => {
-        this.server?.listen(this.port, () => {
+        this.server?.listen(this.port, "0.0.0.0", () => {
           console.log(`[Server] HTTP + WebSocket listening on port ${this.port}`);
           resolve();
         });

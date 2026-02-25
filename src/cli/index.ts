@@ -3,13 +3,13 @@
  * Starts the full autonomous ecosystem.
  */
 
-import { AgentManager } from '../agents/manager.js';
-import { SmartApiServer } from '../core/api-server.js';
-import { daemon } from '../core/daemon.js';
-import { systemAgent } from '../core/system-agent.js';
-import { channelManager } from '../core/channels/manager.js';
-import { TelegramAdapter } from '../core/channels/providers/telegram.js';
-import { configManager } from '../core/config.js';
+import { AgentManager } from "../agents/manager.js";
+import { SmartApiServer } from "../core/api-server.js";
+import { channelManager } from "../core/channels/manager.js";
+import { TelegramAdapter } from "../core/channels/providers/telegram.js";
+import { configManager } from "../core/config.js";
+import { daemon } from "../core/daemon.js";
+import { systemAgent } from "../core/system-agent.js";
 
 export class OpenClawCLI {
   private manager: AgentManager;
@@ -21,20 +21,20 @@ export class OpenClawCLI {
   }
 
   async run(args: string[]): Promise<number> {
-    const command = args[0] || 'start';
+    const command = args[0] || "start";
 
-    if (command === 'start') {
+    if (command === "start") {
       await this.startEcosystem();
       return 0;
     }
-    
+
     // ... (other commands omitted for brevity)
     console.log('Use "start" to launch the ecosystem.');
     return 0;
   }
 
   private async startEcosystem() {
-    console.log('\n🚀 Initializing OpenClaw Next Ecosystem...\n');
+    console.log("\n🚀 Initializing OpenClaw Next Ecosystem...\n");
 
     // 1. Load Config
     await configManager.load();
@@ -42,26 +42,26 @@ export class OpenClawCLI {
 
     // 2. Start Core Systems
     daemon.start(); // Heartbeat
-    console.log('✅ Heartbeat Daemon active.');
+    console.log("✅ Heartbeat Daemon active.");
 
     // 3. Start System Watchdog (Local 3B)
     // systemAgent constructor starts its loop automatically
-    console.log('✅ System Watchdog active.');
+    console.log("✅ System Watchdog active.");
 
     // 4. Start Channels (if configured)
     if (config.channels?.telegram?.token) {
       channelManager.registerChannel(new TelegramAdapter(config.channels.telegram.token));
       await channelManager.startAll();
-      console.log('✅ Messaging Channels active.');
+      console.log("✅ Messaging Channels active.");
     }
 
     // 5. Start API Server (UI + WebSocket)
     await this.apiServer.start();
     console.log(`✅ API Server listening on port 18789.`);
-    console.log(`🌐 Dashboard: http://localhost:18789`);
+    console.log(`🌐 Dashboard: http://localhost:3000 (via Vite dev) or http://localhost:18789`);
 
-    console.log('\n🤖 OpenClaw is now autonomous. Press Ctrl+C to stop.\n');
-    
+    console.log("\n🤖 OpenClaw is now autonomous. Press Ctrl+C to stop.\n");
+
     // Keep alive
     await new Promise(() => {});
   }
@@ -73,5 +73,5 @@ export async function main(args: string[] = process.argv.slice(2)): Promise<numb
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main().then(code => process.exit(code));
+  main().then((code) => process.exit(code));
 }

@@ -6,22 +6,24 @@
  * Sensitive fields that require encryption/handling
  */
 export const SENSITIVE_FIELDS = [
-    'apiKey',
-    'apiSecret',
-    'token',
-    'password',
-    'privateKey',
-    'secret',
+    "apiKey",
+    "apiSecret",
+    "token",
+    "password",
+    "privateKey",
+    "secret",
 ];
 /**
  * Default configuration
  */
 export const DEFAULT_CONFIG = {
-    version: '1.0.0',
-    environment: 'development',
+    version: "1.0.0",
+    environment: "development",
     gateway: {
-        url: 'ws://localhost:18789',
-        token: '',
+        url: typeof window !== "undefined"
+            ? `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/api`
+            : "ws://localhost:18789",
+        token: "",
         timeout: 30000,
         reconnect: {
             enabled: true,
@@ -34,25 +36,17 @@ export const DEFAULT_CONFIG = {
         enabled: true,
         local: {
             enabled: true,
-            endpoint: 'http://localhost:11434',
-            defaultModel: 'gemma3',
+            endpoint: "http://localhost:11434",
+            defaultModel: "gemma3",
         },
-        models: [
-            'gemma3',
-            'llama3.1',
-            'llama3.2',
-            'mistral',
-            'codellama',
-            'qwen2.5',
-            'phi3',
-        ],
-        embeddingModel: 'nomic-embed-text',
+        models: ["gemma3", "llama3.1", "llama3.2", "mistral", "codellama", "qwen2.5", "phi3"],
+        embeddingModel: "nomic-embed-text",
     },
     providers: {},
     channels: {},
     dashboard: {
-        theme: 'dark',
-        language: 'en',
+        theme: "dark",
+        language: "en",
         sidebarCollapsed: false,
         autoRefresh: true,
         refreshInterval: 30000,
@@ -62,8 +56,8 @@ export const DEFAULT_CONFIG = {
             desktop: true,
         },
         layout: {
-            defaultView: 'dashboard',
-            pinnedViews: ['agents', 'tools', 'skills'],
+            defaultView: "dashboard",
+            pinnedViews: ["agents", "tools", "skills"],
         },
     },
     features: {
@@ -93,7 +87,7 @@ export class ConfigManager {
         const storageConfig = this.loadFromStorage();
         this.config = this.mergeConfig(DEFAULT_CONFIG, envConfig, storageConfig);
         this.loaded = true;
-        this.emit('loaded', this.config);
+        this.emit("loaded", this.config);
         return this.config;
     }
     /**
@@ -101,14 +95,14 @@ export class ConfigManager {
      */
     loadFromEnv() {
         const env = {};
-        if (typeof process === 'undefined')
+        if (typeof process === "undefined")
             return env;
         // Gateway config
         if (process.env.VITE_GATEWAY_URL) {
             env.gateway = {
                 ...DEFAULT_CONFIG.gateway,
                 url: process.env.VITE_GATEWAY_URL,
-                token: process.env.VITE_GATEWAY_TOKEN || '',
+                token: process.env.VITE_GATEWAY_TOKEN || "",
             };
         }
         // Ollama config
@@ -118,7 +112,7 @@ export class ConfigManager {
                 local: {
                     ...DEFAULT_CONFIG.ollama.local,
                     endpoint: process.env.VITE_OLLAMA_ENDPOINT,
-                    defaultModel: process.env.VITE_OLLAMA_MODEL || 'gemma3',
+                    defaultModel: process.env.VITE_OLLAMA_MODEL || "gemma3",
                 },
             };
         }
@@ -130,13 +124,13 @@ export class ConfigManager {
                 cloud: {
                     enabled: true,
                     apiKey: process.env.VITE_OLLAMA_CLOUD_API_KEY,
-                    endpoint: process.env.VITE_OLLAMA_CLOUD_ENDPOINT || 'https://api.ollama.com',
-                    defaultModel: process.env.VITE_OLLAMA_CLOUD_MODEL || 'gemma3',
+                    endpoint: process.env.VITE_OLLAMA_CLOUD_ENDPOINT || "https://api.ollama.com",
+                    defaultModel: process.env.VITE_OLLAMA_CLOUD_MODEL || "gemma3",
                 },
             };
         }
         // Provider configs
-        const providers = ['OPENAI', 'ANTHROPIC', 'GROQ'];
+        const providers = ["OPENAI", "ANTHROPIC", "GROQ"];
         env.providers = {};
         for (const provider of providers) {
             const key = process.env[`VITE_${provider}_API_KEY`];
@@ -156,7 +150,7 @@ export class ConfigManager {
                 ...env.channels,
                 telegram: {
                     token: process.env.TELEGRAM_BOT_TOKEN,
-                }
+                },
             };
         }
         return env;
@@ -165,16 +159,16 @@ export class ConfigManager {
      * Load from localStorage (browser only)
      */
     loadFromStorage() {
-        if (typeof localStorage === 'undefined')
+        if (typeof localStorage === "undefined")
             return {};
         try {
-            const saved = localStorage.getItem('openclaw-config');
+            const saved = localStorage.getItem("openclaw-config");
             if (saved) {
                 return JSON.parse(saved);
             }
         }
         catch {
-            console.warn('Failed to load config from localStorage');
+            console.warn("Failed to load config from localStorage");
         }
         return {};
     }
@@ -187,10 +181,10 @@ export class ConfigManager {
         }
         // Only save non-sensitive parts to localStorage
         const storable = this.sanitizeForStorage(this.config);
-        if (typeof localStorage !== 'undefined') {
-            localStorage.setItem('openclaw-config', JSON.stringify(storable));
+        if (typeof localStorage !== "undefined") {
+            localStorage.setItem("openclaw-config", JSON.stringify(storable));
         }
-        this.emit('saved', this.config);
+        this.emit("saved", this.config);
     }
     /**
      * Get current configuration
@@ -209,14 +203,14 @@ export class ConfigManager {
      */
     update(updates) {
         this.config = this.mergeConfig(this.config, updates);
-        this.emit('changed', this.config);
+        this.emit("changed", this.config);
     }
     /**
      * Set a specific value
      */
     set(key, value) {
         this.config[key] = value;
-        this.emit('changed', this.config);
+        this.emit("changed", this.config);
     }
     /**
      * Subscribe to configuration changes
@@ -237,16 +231,15 @@ export class ConfigManager {
         const errors = [];
         // Check gateway
         if (!this.config.gateway.url) {
-            errors.push('Gateway URL is required');
+            errors.push("Gateway URL is required");
         }
         // Check Ollama if enabled
         if (this.config.ollama.enabled) {
             if (this.config.ollama.local.enabled && !this.config.ollama.local.endpoint) {
-                errors.push('Ollama local endpoint is required when enabled');
+                errors.push("Ollama local endpoint is required when enabled");
             }
-            if (this.config.ollama.cloud?.enabled &&
-                !this.config.ollama.cloud.apiKey) {
-                errors.push('Ollama cloud API key is required when cloud is enabled');
+            if (this.config.ollama.cloud?.enabled && !this.config.ollama.cloud.apiKey) {
+                errors.push("Ollama cloud API key is required when cloud is enabled");
             }
         }
         return { valid: errors.length === 0, errors };
@@ -260,9 +253,9 @@ export class ConfigManager {
         const maskValue = (obj) => {
             for (const [key, value] of Object.entries(obj)) {
                 if (SENSITIVE_FIELDS.some((f) => key.toLowerCase().includes(f.toLowerCase()))) {
-                    obj[key] = value ? '********' : '';
+                    obj[key] = value ? "********" : "";
                 }
-                else if (typeof value === 'object' && value !== null) {
+                else if (typeof value === "object" && value !== null) {
                     maskValue(value);
                 }
             }
@@ -313,7 +306,7 @@ export class ConfigManager {
                 continue;
             for (const [key, value] of Object.entries(override)) {
                 if (value !== null &&
-                    typeof value === 'object' &&
+                    typeof value === "object" &&
                     !Array.isArray(value) &&
                     key in result) {
                     result[key] = this.mergeConfig(result[key], value);
@@ -404,8 +397,8 @@ export async function saveConfig(config) {
  */
 export function getConfig(key) {
     const config = configManager.get();
-    return key.split('.').reduce((obj, k) => {
-        if (obj && typeof obj === 'object' && k in obj) {
+    return key.split(".").reduce((obj, k) => {
+        if (obj && typeof obj === "object" && k in obj) {
             return obj[k];
         }
         return undefined;

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Debug Test</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #1a1a2e; color: #eee; }
+    .log { margin: 5px 0; padding: 10px; background: #16213e; border-radius: 4px; }
+    .error { color: #ff6b6b; }
+    .success { color: #51cf66; }
+    .info { color: #4dabf7; }
+  </style>
+</head>
+<body>
+  <h1>OpenClaw Debug</h1>
+  <div id='logs'></div>
+  <script>
+    function log(msg, type='info') {
+      const div = document.createElement('div');
+      div.className = 'log ' + type;
+      div.textContent = new Date().toLocaleTimeString() + ' - ' + msg;
+      document.getElementById('logs').appendChild(div);
+    }
+
+    log('Page loaded', 'info');
+    log('Testing API connection...', 'info');
+
+    fetch('/api/health')
+      .then(r => r.json())
+      .then(d => log('API Health: ' + JSON.stringify(d), 'success'))
+      .catch(e => log('API Error: ' + e, 'error'));
+
+    log('Testing WebSocket...', 'info');
+    const ws = new WebSocket('ws://72.62.132.43/api');
+    ws.onopen = () => log('WebSocket connected!', 'success');
+    ws.onerror = (e) => log('WebSocket error: ' + JSON.stringify(e), 'error');
+    ws.onclose = (e) => log('WebSocket closed: ' + e.code + ' ' + e.reason, 'error');
+
+    log('Window location: ' + window.location.host, 'info');
+  </script>
+</body>
+</html>

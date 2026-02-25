@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Test</title>
+  <style>
+    body { margin: 0; padding: 20px; font-family: sans-serif; background: #333; color: white; }
+    #root { background: #0f1115; min-height: 100vh; padding: 20px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    // Override console.error to show on page
+    const root = document.getElementById('root');
+    const log = (msg, isError = false) => {
+      const div = document.createElement('div');
+      div.style.cssText = isError ? 'color: #ff6b6b; margin: 5px 0;' : 'color: #51cf66; margin: 5px 0;';
+      div.textContent = msg;
+      root.appendChild(div);
+    };
+
+    log('Starting test...');
+    log('Window location: ' + window.location.host);
+
+    // Test fetch
+    fetch('/api/health')
+      .then(r => r.json())
+      .then(d => log('API OK: ' + JSON.stringify(d).slice(0, 100)))
+      .catch(e => log('API Error: ' + e, true));
+
+    // Try loading the main module
+    log('Attempting to load main module...');
+    import('/assets/index-DHSkci7G.js')
+      .then(() => log('Module loaded successfully'))
+      .catch(e => log('Module error: ' + e, true));
+  </script>
+</body>
+</html>

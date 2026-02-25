@@ -1,34 +1,44 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // OpenClaw Next - Main App Component
 // Root application component with routing and state management
-import { useState, useEffect, useCallback } from 'react';
-import { SetupWizard } from './components/SetupWizard.js';
-import { DashboardLayout } from './components/DashboardLayout.js';
-import { AgentDashboard } from '../views/AgentDashboard.js';
-import { ToolsView } from '../views/ToolsView.js';
-import { PluginsView } from '../views/PluginsView.js';
-import { SkillsView } from '../views/SkillsView.js';
-import { configManager } from '../core/config.js';
+import { useState, useEffect, useCallback } from "react";
+import { AgentDashboard } from "../views/AgentDashboard.js";
+import { GovernanceDashboard } from "../views/governance/GovernanceDashboard.js";
+import { PluginsView } from "../views/PluginsView.js";
+import { SessionsView } from "../views/SessionsView.js";
+import { SkillsView } from "../views/SkillsView.js";
+import { ToolsView } from "../views/ToolsView.js";
+import { DashboardLayout } from "./components/DashboardLayout.js";
+import { SetupWizard } from "./components/SetupWizard.js";
+import { ApiKeys } from "./pages/governance/ApiKeys.js";
+import { Approvals } from "./pages/governance/Approvals.js";
+import { Audit } from "./pages/governance/Audit.js";
+import { Gateways } from "./pages/governance/Gateways.js";
+import { Policies } from "./pages/governance/Policies.js";
+import { Settings } from "./pages/governance/Settings.js";
+import { Tasks } from "./pages/governance/Tasks.js";
+import { Teams } from "./pages/governance/Teams.js";
+import { Webhooks } from "./pages/governance/Webhooks.js";
 /**
  * Main App Component
  */
 export const App = () => {
-    const [isSetupComplete, setIsSetupComplete] = useState(false);
+    const [isSetupComplete, setIsSetupComplete] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
-    const [currentView, setCurrentView] = useState('dashboard');
+    const [currentView, setCurrentView] = useState("dashboard");
     const [error, setError] = useState(null);
     // Check if setup is complete on mount
     useEffect(() => {
         const checkSetup = async () => {
             try {
                 setIsLoading(true);
-                await configManager.load();
-                const config = configManager.get();
-                const hasRequiredConfig = config.ollama?.local?.endpoint || config.ollama?.cloud?.enabled;
-                setIsSetupComplete(Boolean(hasRequiredConfig && config.ollama?.enabled));
+                // configManager is server-side only, skip in browser
+                // await configManager.load();
+                // Skip setup check - always show dashboard
+                setIsSetupComplete(true);
             }
             catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to initialize app');
+                setError(err instanceof Error ? err.message : "Failed to initialize app");
             }
             finally {
                 setIsLoading(false);
@@ -47,19 +57,41 @@ export const App = () => {
     // Render current view
     const renderView = () => {
         switch (currentView) {
-            case 'agents':
+            case "dashboard":
+            case "governance":
+                return _jsx(GovernanceDashboard, {});
+            case "agents":
                 return _jsx(AgentDashboard, {});
-            case 'delegation':
-                return _jsxs("div", { className: "p-8", children: [_jsx("h2", { className: "text-2xl font-bold text-white", children: "Delegation" }), _jsx("p", { className: "text-slate-400 mt-2", children: "Use the mobile app for task delegation." })] });
-            case 'tools':
+            case "sessions":
+                return _jsx(SessionsView, {});
+            case "delegation":
+                return (_jsxs("div", { className: "p-8", children: [_jsx("h2", { className: "text-2xl font-bold text-white", children: "Delegation" }), _jsx("p", { className: "text-slate-400 mt-2", children: "Use the mobile app for task delegation." })] }));
+            case "tools":
                 return _jsx(ToolsView, {});
-            case 'plugins':
+            case "plugins":
                 return _jsx(PluginsView, {});
-            case 'skills':
+            case "skills":
                 return _jsx(SkillsView, {});
-            case 'dashboard':
+            case "teams":
+                return _jsx(Teams, {});
+            case "tasks":
+                return _jsx(Tasks, {});
+            case "approvals":
+                return _jsx(Approvals, {});
+            case "webhooks":
+                return _jsx(Webhooks, {});
+            case "apiKeys":
+                return _jsx(ApiKeys, {});
+            case "policies":
+                return _jsx(Policies, {});
+            case "gateways":
+                return _jsx(Gateways, {});
+            case "audit":
+                return _jsx(Audit, {});
+            case "settings":
+                return _jsx(Settings, {});
             default:
-                return (_jsxs("div", { className: "p-8", children: [_jsx("h1", { className: "text-3xl font-bold mb-6", children: "Welcome to OpenClaw Next" }), _jsx("p", { className: "text-[var(--color-text-muted)] mb-8", children: "Your agentic gateway control center. Use the sidebar to navigate to different sections." }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: [_jsx(QuickLinkCard, { title: "Agents", description: "Manage your AI agents", icon: "\uD83E\uDD16", onClick: () => handleNavigate('agents') }), _jsx(QuickLinkCard, { title: "Tools", description: "Configure available tools", icon: "\uD83D\uDEE0\uFE0F", onClick: () => handleNavigate('tools') }), _jsx(QuickLinkCard, { title: "Plugins", description: "Manage system plugins", icon: "\uD83D\uDD0C", onClick: () => handleNavigate('plugins') }), _jsx(QuickLinkCard, { title: "Skills", description: "Browse and install skills", icon: "\u2728", onClick: () => handleNavigate('skills') })] })] }));
+                return (_jsxs("div", { className: "p-8", children: [_jsx("h1", { className: "text-3xl font-bold mb-6", children: "Welcome to OpenClaw Next" }), _jsx("p", { className: "text-[var(--color-text-muted)] mb-8", children: "Your agentic gateway control center. Use the sidebar to navigate to different sections." }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: [_jsx(QuickLinkCard, { title: "Agents", description: "Manage your AI agents", icon: "\uD83E\uDD16", onClick: () => handleNavigate("agents") }), _jsx(QuickLinkCard, { title: "Governance", description: "System governance and oversight", icon: "\u2696\uFE0F", onClick: () => handleNavigate("governance") }), _jsx(QuickLinkCard, { title: "Teams", description: "Manage teams and organizations", icon: "\uD83D\uDC65", onClick: () => handleNavigate("teams") }), _jsx(QuickLinkCard, { title: "Tools", description: "Configure available tools", icon: "\uD83D\uDEE0\uFE0F", onClick: () => handleNavigate("tools") }), _jsx(QuickLinkCard, { title: "Plugins", description: "Manage system plugins", icon: "\uD83D\uDD0C", onClick: () => handleNavigate("plugins") }), _jsx(QuickLinkCard, { title: "Skills", description: "Browse and install skills", icon: "\u2728", onClick: () => handleNavigate("skills") }), _jsx(QuickLinkCard, { title: "Gateways", description: "Manage gateway servers", icon: "\uD83C\uDF10", onClick: () => handleNavigate("gateways") }), _jsx(QuickLinkCard, { title: "Audit Log", description: "View system audit logs", icon: "\uD83D\uDCDC", onClick: () => handleNavigate("audit") })] })] }));
         }
     };
     // Loading state

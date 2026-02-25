@@ -8,25 +8,25 @@
 /**
  * Configuration sources in priority order
  */
-export type ConfigSource = 'env' | 'file' | 'localStorage' | 'remote' | 'default';
+export type ConfigSource = "env" | "file" | "localStorage" | "remote" | "default";
 
 /**
  * Sensitive fields that require encryption/handling
  */
 export const SENSITIVE_FIELDS = [
-  'apiKey',
-  'apiSecret',
-  'token',
-  'password',
-  'privateKey',
-  'secret',
+  "apiKey",
+  "apiSecret",
+  "token",
+  "password",
+  "privateKey",
+  "secret",
 ] as const;
 
 /**
  * Configuration schema for validation
  */
 export interface ConfigSchema {
-  type: 'string' | 'number' | 'boolean' | 'array' | 'object';
+  type: "string" | "number" | "boolean" | "array" | "object";
   required?: boolean;
   default?: unknown;
   sensitive?: boolean;
@@ -84,7 +84,7 @@ export interface GatewayConfig {
  * Dashboard configuration
  */
 export interface DashboardConfig {
-  theme: 'dark' | 'light' | 'system';
+  theme: "dark" | "light" | "system";
   language: string;
   sidebarCollapsed: boolean;
   autoRefresh: boolean;
@@ -120,7 +120,7 @@ export interface ChannelsConfig {
  */
 export interface AppConfig {
   version: string;
-  environment: 'development' | 'staging' | 'production';
+  environment: "development" | "staging" | "production";
   gateway: GatewayConfig;
   ollama: OllamaConfig;
   providers: {
@@ -144,11 +144,14 @@ export interface AppConfig {
  * Default configuration
  */
 export const DEFAULT_CONFIG: AppConfig = {
-  version: '1.0.0',
-  environment: 'development',
+  version: "1.0.0",
+  environment: "development",
   gateway: {
-    url: 'ws://localhost:18789',
-    token: '',
+    url:
+      typeof window !== "undefined"
+        ? `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/api`
+        : "ws://localhost:18789",
+    token: "",
     timeout: 30000,
     reconnect: {
       enabled: true,
@@ -161,25 +164,17 @@ export const DEFAULT_CONFIG: AppConfig = {
     enabled: true,
     local: {
       enabled: true,
-      endpoint: 'http://localhost:11434',
-      defaultModel: 'gemma3',
+      endpoint: "http://localhost:11434",
+      defaultModel: "gemma3",
     },
-    models: [
-      'gemma3',
-      'llama3.1',
-      'llama3.2',
-      'mistral',
-      'codellama',
-      'qwen2.5',
-      'phi3',
-    ],
-    embeddingModel: 'nomic-embed-text',
+    models: ["gemma3", "llama3.1", "llama3.2", "mistral", "codellama", "qwen2.5", "phi3"],
+    embeddingModel: "nomic-embed-text",
   },
   providers: {},
   channels: {},
   dashboard: {
-    theme: 'dark',
-    language: 'en',
+    theme: "dark",
+    language: "en",
     sidebarCollapsed: false,
     autoRefresh: true,
     refreshInterval: 30000,
@@ -189,8 +184,8 @@ export const DEFAULT_CONFIG: AppConfig = {
       desktop: true,
     },
     layout: {
-      defaultView: 'dashboard',
-      pinnedViews: ['agents', 'tools', 'skills'],
+      defaultView: "dashboard",
+      pinnedViews: ["agents", "tools", "skills"],
     },
   },
   features: {
@@ -222,14 +217,10 @@ export class ConfigManager {
     const envConfig = this.loadFromEnv();
     const storageConfig = this.loadFromStorage();
 
-    this.config = this.mergeConfig(
-      DEFAULT_CONFIG,
-      envConfig,
-      storageConfig
-    );
+    this.config = this.mergeConfig(DEFAULT_CONFIG, envConfig, storageConfig);
 
     this.loaded = true;
-    this.emit('loaded', this.config);
+    this.emit("loaded", this.config);
     return this.config;
   }
 
@@ -239,14 +230,14 @@ export class ConfigManager {
   private loadFromEnv(): Partial<AppConfig> {
     const env: Partial<AppConfig> = {};
 
-    if (typeof process === 'undefined') return env;
+    if (typeof process === "undefined") return env;
 
     // Gateway config
     if (process.env.VITE_GATEWAY_URL) {
       env.gateway = {
         ...DEFAULT_CONFIG.gateway,
         url: process.env.VITE_GATEWAY_URL,
-        token: process.env.VITE_GATEWAY_TOKEN || '',
+        token: process.env.VITE_GATEWAY_TOKEN || "",
       };
     }
 
@@ -257,7 +248,7 @@ export class ConfigManager {
         local: {
           ...DEFAULT_CONFIG.ollama.local,
           endpoint: process.env.VITE_OLLAMA_ENDPOINT,
-          defaultModel: process.env.VITE_OLLAMA_MODEL || 'gemma3',
+          defaultModel: process.env.VITE_OLLAMA_MODEL || "gemma3",
         },
       };
     }
@@ -270,14 +261,14 @@ export class ConfigManager {
         cloud: {
           enabled: true,
           apiKey: process.env.VITE_OLLAMA_CLOUD_API_KEY,
-          endpoint: process.env.VITE_OLLAMA_CLOUD_ENDPOINT || 'https://api.ollama.com',
-          defaultModel: process.env.VITE_OLLAMA_CLOUD_MODEL || 'gemma3',
+          endpoint: process.env.VITE_OLLAMA_CLOUD_ENDPOINT || "https://api.ollama.com",
+          defaultModel: process.env.VITE_OLLAMA_CLOUD_MODEL || "gemma3",
         },
       };
     }
 
     // Provider configs
-    const providers = ['OPENAI', 'ANTHROPIC', 'GROQ'];
+    const providers = ["OPENAI", "ANTHROPIC", "GROQ"];
     env.providers = {};
     for (const provider of providers) {
       const key = process.env[`VITE_${provider}_API_KEY`];
@@ -298,7 +289,7 @@ export class ConfigManager {
         ...env.channels,
         telegram: {
           token: process.env.TELEGRAM_BOT_TOKEN,
-        }
+        },
       };
     }
 
@@ -309,15 +300,15 @@ export class ConfigManager {
    * Load from localStorage (browser only)
    */
   private loadFromStorage(): Partial<AppConfig> {
-    if (typeof localStorage === 'undefined') return {};
+    if (typeof localStorage === "undefined") return {};
 
     try {
-      const saved = localStorage.getItem('openclaw-config');
+      const saved = localStorage.getItem("openclaw-config");
       if (saved) {
         return JSON.parse(saved);
       }
     } catch {
-      console.warn('Failed to load config from localStorage');
+      console.warn("Failed to load config from localStorage");
     }
     return {};
   }
@@ -333,11 +324,11 @@ export class ConfigManager {
     // Only save non-sensitive parts to localStorage
     const storable = this.sanitizeForStorage(this.config);
 
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('openclaw-config', JSON.stringify(storable));
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("openclaw-config", JSON.stringify(storable));
     }
 
-    this.emit('saved', this.config);
+    this.emit("saved", this.config);
   }
 
   /**
@@ -359,7 +350,7 @@ export class ConfigManager {
    */
   update(updates: Partial<AppConfig>): void {
     this.config = this.mergeConfig(this.config, updates);
-    this.emit('changed', this.config);
+    this.emit("changed", this.config);
   }
 
   /**
@@ -367,13 +358,13 @@ export class ConfigManager {
    */
   set<K extends keyof AppConfig>(key: K, value: AppConfig[K]): void {
     this.config[key] = value;
-    this.emit('changed', this.config);
+    this.emit("changed", this.config);
   }
 
   /**
    * Subscribe to configuration changes
    */
-  on(event: 'loaded' | 'saved' | 'changed', callback: (config: AppConfig) => void): () => void {
+  on(event: "loaded" | "saved" | "changed", callback: (config: AppConfig) => void): () => void {
     const listeners = this.listeners.get(event) || [];
     listeners.push(callback);
     this.listeners.set(event, listeners);
@@ -382,7 +373,7 @@ export class ConfigManager {
       const current = this.listeners.get(event) || [];
       this.listeners.set(
         event,
-        current.filter((cb) => cb !== callback)
+        current.filter((cb) => cb !== callback),
       );
     };
   }
@@ -395,19 +386,16 @@ export class ConfigManager {
 
     // Check gateway
     if (!this.config.gateway.url) {
-      errors.push('Gateway URL is required');
+      errors.push("Gateway URL is required");
     }
 
     // Check Ollama if enabled
     if (this.config.ollama.enabled) {
       if (this.config.ollama.local.enabled && !this.config.ollama.local.endpoint) {
-        errors.push('Ollama local endpoint is required when enabled');
+        errors.push("Ollama local endpoint is required when enabled");
       }
-      if (
-        this.config.ollama.cloud?.enabled &&
-        !this.config.ollama.cloud.apiKey
-      ) {
-        errors.push('Ollama cloud API key is required when cloud is enabled');
+      if (this.config.ollama.cloud?.enabled && !this.config.ollama.cloud.apiKey) {
+        errors.push("Ollama cloud API key is required when cloud is enabled");
       }
     }
 
@@ -424,8 +412,8 @@ export class ConfigManager {
     const maskValue = (obj: Record<string, unknown>) => {
       for (const [key, value] of Object.entries(obj)) {
         if (SENSITIVE_FIELDS.some((f) => key.toLowerCase().includes(f.toLowerCase()))) {
-          obj[key] = value ? '********' : '';
-        } else if (typeof value === 'object' && value !== null) {
+          obj[key] = value ? "********" : "";
+        } else if (typeof value === "object" && value !== null) {
           maskValue(value as Record<string, unknown>);
         }
       }
@@ -483,13 +471,13 @@ export class ConfigManager {
       for (const [key, value] of Object.entries(override)) {
         if (
           value !== null &&
-          typeof value === 'object' &&
+          typeof value === "object" &&
           !Array.isArray(value) &&
           key in (result as Record<string, unknown>)
         ) {
           (result as Record<string, unknown>)[key] = this.mergeConfig(
             (result as Record<string, unknown>)[key] as Record<string, unknown>,
-            value as Record<string, unknown>
+            value as Record<string, unknown>,
           );
         } else {
           (result as Record<string, unknown>)[key] = value;
@@ -591,8 +579,8 @@ export async function saveConfig(config: Partial<AppConfig>): Promise<void> {
  */
 export function getConfig<T>(key: string): T | undefined {
   const config = configManager.get();
-  return key.split('.').reduce<unknown>((obj, k) => {
-    if (obj && typeof obj === 'object' && k in obj) {
+  return key.split(".").reduce<unknown>((obj, k) => {
+    if (obj && typeof obj === "object" && k in obj) {
       return (obj as Record<string, unknown>)[k];
     }
     return undefined;
