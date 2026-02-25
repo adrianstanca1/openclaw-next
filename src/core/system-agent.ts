@@ -3,15 +3,15 @@
  * Ensures 100% uptime through autonomous self-healing and model failover.
  */
 
-import { ollamaClient } from './ollama.js';
-import { agentManager } from '../agents/index.js';
-import { apiServer } from './api-server.js';
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
+import { agentManager } from "../agents/index.js";
+import { apiServer } from "./api-server.js";
+import { ollamaClient } from "./ollama.js";
 
 export class SystemWatchdog extends EventEmitter {
   private checkInterval = 30000; // 30 seconds
   private restartCounts: Map<string, number> = new Map();
-  private lastStatus: 'healthy' | 'degraded' | 'critical' = 'healthy';
+  private lastStatus: "healthy" | "degraded" | "critical" = "healthy";
 
   constructor() {
     super();
@@ -19,7 +19,7 @@ export class SystemWatchdog extends EventEmitter {
   }
 
   private initialize() {
-    console.log('[Watchdog] 🛡️ System Watchdog active. Root of Trust: Local LLM');
+    console.log("[Watchdog] 🛡️ System Watchdog active. Root of Trust: Local LLM");
     setInterval(() => this.patrol(), this.checkInterval);
   }
 
@@ -37,41 +37,49 @@ export class SystemWatchdog extends EventEmitter {
       // 2. Check Agent Manager State
       const agents = agentManager.getAllAgents();
       for (const agent of agents) {
-        if ((agent.state as any) === 'error') {
+        if ((agent.state as any) === "error") {
           const restarts = this.restartCounts.get(agent.id) || 0;
-          
+
           if (restarts < 3) {
-            console.warn(`[Watchdog] ⚠️ Agent ${agent.id} in error state. Rebooting (Attempt ${restarts + 1})...`);
+            console.warn(
+              `[Watchdog] ⚠️ Agent ${agent.id} in error state. Rebooting (Attempt ${restarts + 1})...`,
+            );
             await agentManager.resumeAgent(agent.id);
             this.restartCounts.set(agent.id, restarts + 1);
           } else {
-            console.error(`[Watchdog] 🛑 Agent ${agent.id} failed 3 times. Suspending to prevent loop.`);
-            apiServer.broadcast('system_alert', { title: 'Agent Failure', message: `${agent.id} suspended after multiple crashes.` });
+            console.error(
+              `[Watchdog] 🛑 Agent ${agent.id} failed 3 times. Suspending to prevent loop.`,
+            );
+            apiServer.broadcast("system_alert", {
+              title: "Agent Failure",
+              message: `${agent.id} suspended after multiple crashes.`,
+            });
           }
         }
       }
 
       // 3. Resource Monitoring
       const mem = process.memoryUsage().heapUsed / 1024 / 1024;
-      if (mem > 1024) { // 1GB limit
-        console.error('[Watchdog] 🚨 Memory leak detected. Triggering emergency cleanup.');
+      if (mem > 1024) {
+        // 1GB limit
+        console.error("[Watchdog] 🚨 Memory leak detected. Triggering emergency cleanup.");
         this.performEmergencyCleanup();
       }
 
-      if (this.lastStatus === 'healthy') {
+      if (this.lastStatus === "healthy") {
         await this.reconcileKnowledge();
       }
 
-      this.lastStatus = 'healthy';
+      this.lastStatus = "healthy";
     } catch (error) {
-      this.lastStatus = 'critical';
-      this.emit('emergency_reboot_required');
+      this.lastStatus = "critical";
+      this.emit("emergency_reboot_required");
     }
   }
 
   private async handleModelFailure() {
-    console.error('[Watchdog] 🚨 Local LLM (Ollama) is non-responsive.');
-    this.lastStatus = 'degraded';
+    console.error("[Watchdog] 🚨 Local LLM (Ollama) is non-responsive.");
+    this.lastStatus = "degraded";
   }
 
   private performEmergencyCleanup() {
@@ -92,5 +100,6 @@ export class SystemWatchdog extends EventEmitter {
   }
 }
 
-export const systemAgent = new SystemWatchdog();
+export const systemAgent =
+  typeof window === "undefined" ? new SystemWatchdog() : ({} as SystemWatchdog);
 export const watchdog = systemAgent;

@@ -1127,5 +1127,6 @@ export class SmartApiServer extends EventEmitter {
   }
 }
 
-export const apiServer = new SmartApiServer();
+export const apiServer =
+  typeof window === "undefined" ? new SmartApiServer() : ({} as SmartApiServer);
 export const smartApiServer = apiServer;
