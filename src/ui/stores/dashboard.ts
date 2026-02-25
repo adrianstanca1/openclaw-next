@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import axios from 'axios';
+import axios from "axios";
+import { create } from "zustand";
 
-const API_BASE_URL = 'http://localhost:18789/api';
+const API_BASE_URL = "/api";
 
 interface DashboardStats {
   totalAgents: number;
@@ -12,7 +12,7 @@ interface DashboardStats {
   onlineGateways: number;
   pendingApprovals: number;
   criticalApprovals: number;
-  systemHealth: 'healthy' | 'degraded' | 'critical';
+  systemHealth: "healthy" | "degraded" | "critical";
 }
 
 interface DashboardStore {
@@ -23,7 +23,7 @@ interface DashboardStore {
   auditLogs: any[];
   loading: boolean;
   error: string | null;
-  
+
   fetchStats: () => Promise<void>;
   fetchAgents: () => Promise<void>;
   fetchTasks: () => Promise<void>;
@@ -48,7 +48,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
         set({ stats: response.data.data });
       }
     } catch (error) {
-      console.error('Failed to fetch stats:', error);
+      console.error("Failed to fetch stats:", error);
     }
   },
 
@@ -59,7 +59,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
         set({ agents: response.data.data });
       }
     } catch (error) {
-      console.error('Failed to fetch agents:', error);
+      console.error("Failed to fetch agents:", error);
     }
   },
 
@@ -70,7 +70,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
         set({ tasks: response.data.data });
       }
     } catch (error) {
-      console.error('Failed to fetch tasks:', error);
+      console.error("Failed to fetch tasks:", error);
     }
   },
 
@@ -81,7 +81,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
         set({ approvals: response.data.data });
       }
     } catch (error) {
-      console.error('Failed to fetch approvals:', error);
+      console.error("Failed to fetch approvals:", error);
     }
   },
 
@@ -92,11 +92,12 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
         set({ auditLogs: response.data.data });
       }
     } catch (error) {
-      console.error('Failed to fetch audit logs:', error);
+      console.error("Failed to fetch audit logs:", error);
     }
   },
 
-  setStats: (newStats) => set((state) => ({
-    stats: state.stats ? { ...state.stats, ...newStats } : (newStats as DashboardStats)
-  }))
+  setStats: (newStats) =>
+    set((state) => ({
+      stats: state.stats ? { ...state.stats, ...newStats } : (newStats as DashboardStats),
+    })),
 }));
