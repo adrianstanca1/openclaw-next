@@ -49,6 +49,31 @@ export const isIP = () => 0;
 export const isIPv4 = () => false;
 export const isIPv6 = () => false;
 
+// util stubs
+export const deprecate = (fn: Function) => fn;
+export const inherits = () => {};
+export const promisify = (fn: Function) => fn;
+export const inspect = (v: unknown) => String(v);
+// os stubs
+export const hostname = () => "localhost";
+export const platform = () => "browser";
+// stream stubs
+export class Readable extends EventEmitter {}
+export class Writable extends EventEmitter {}
+export class Transform extends EventEmitter {}
+// crypto stubs
+export const randomBytes = (n: number) => new Uint8Array(n);
+export const createHash = () => ({ update: () => ({ digest: () => "" }) });
+// async_hooks stubs
+export class AsyncLocalStorage {
+  run(_store: unknown, fn: Function) {
+    return fn();
+  }
+  getStore() {
+    return undefined;
+  }
+}
+
 export default {
   execSync,
   join,
@@ -65,4 +90,16 @@ export default {
   isIP,
   isIPv4,
   isIPv6,
+  deprecate,
+  inherits,
+  promisify,
+  inspect,
+  hostname,
+  platform,
+  Readable,
+  Writable,
+  Transform,
+  randomBytes,
+  createHash,
+  AsyncLocalStorage,
 };

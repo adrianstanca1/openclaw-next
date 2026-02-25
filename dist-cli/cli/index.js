@@ -1,19 +1,21 @@
+"use strict";
 /**
  * OpenClaw Next - CLI Entry Point
  * Starts the full autonomous ecosystem.
  */
-import { AgentManager } from "../agents/manager.js";
-import { SmartApiServer } from "../core/api-server.js";
-import { channelManager } from "../core/channels/manager.js";
-import { TelegramAdapter } from "../core/channels/providers/telegram.js";
-import { configManager } from "../core/config.js";
-import { daemon } from "../core/daemon.js";
-export class OpenClawCLI {
-    manager;
-    apiServer;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OpenClawCLI = void 0;
+exports.main = main;
+const manager_js_1 = require("../agents/manager.js");
+const api_server_js_1 = require("../core/api-server.js");
+const manager_js_2 = require("../core/channels/manager.js");
+const telegram_js_1 = require("../core/channels/providers/telegram.js");
+const config_js_1 = require("../core/config.js");
+const daemon_js_1 = require("../core/daemon.js");
+class OpenClawCLI {
     constructor() {
-        this.manager = new AgentManager();
-        this.apiServer = new SmartApiServer();
+        this.manager = new manager_js_1.AgentManager();
+        this.apiServer = new api_server_js_1.SmartApiServer();
     }
     async run(args) {
         const command = args[0] || "start";
@@ -26,20 +28,21 @@ export class OpenClawCLI {
         return 0;
     }
     async startEcosystem() {
+        var _a, _b;
         console.log("\n🚀 Initializing OpenClaw Next Ecosystem...\n");
         // 1. Load Config
-        await configManager.load();
-        const config = configManager.get();
+        await config_js_1.configManager.load();
+        const config = config_js_1.configManager.get();
         // 2. Start Core Systems
-        daemon.start(); // Heartbeat
+        daemon_js_1.daemon.start(); // Heartbeat
         console.log("✅ Heartbeat Daemon active.");
         // 3. Start System Watchdog (Local 3B)
         // systemAgent constructor starts its loop automatically
         console.log("✅ System Watchdog active.");
         // 4. Start Channels (if configured)
-        if (config.channels?.telegram?.token) {
-            channelManager.registerChannel(new TelegramAdapter(config.channels.telegram.token));
-            await channelManager.startAll();
+        if ((_b = (_a = config.channels) === null || _a === void 0 ? void 0 : _a.telegram) === null || _b === void 0 ? void 0 : _b.token) {
+            manager_js_2.channelManager.registerChannel(new telegram_js_1.TelegramAdapter(config.channels.telegram.token));
+            await manager_js_2.channelManager.startAll();
             console.log("✅ Messaging Channels active.");
         }
         // 5. Start API Server (UI + WebSocket)
@@ -51,10 +54,11 @@ export class OpenClawCLI {
         await new Promise(() => { });
     }
 }
-export async function main(args = process.argv.slice(2)) {
+exports.OpenClawCLI = OpenClawCLI;
+async function main(args = process.argv.slice(2)) {
     const cli = new OpenClawCLI();
     return cli.run(args);
 }
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (require.main === module) {
     main().then((code) => process.exit(code));
 }
