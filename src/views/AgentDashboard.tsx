@@ -1,13 +1,13 @@
 // OpenClaw Next - Agent Dashboard View
 // Display and manage agents using the AgentManager
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { agentManager } from '../agents/index.js';
-import { AgentRole, AgentCapability, type AgentConfig } from '../core/types.js';
-import { AgentState } from '../agents/types.js';
-import type { AgentCardData, FilterState, ModalState } from '../ui/types.js';
-import { StatCard } from '../ui/components/StatCard.js';
-import { EmptyState } from '../ui/components/EmptyState.js';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { agentManager } from "../agents/index.js";
+import { AgentState } from "../agents/types.js";
+import { AgentRole, AgentCapability, type AgentConfig } from "../core/types.js";
+import { EmptyState } from "../ui/components/EmptyState.js";
+import { StatCard } from "../ui/components/StatCard.js";
+import type { AgentCardData, FilterState, ModalState } from "../ui/types.js";
 
 /**
  * Agent Dashboard View
@@ -17,11 +17,11 @@ export const AgentDashboard: React.FC = () => {
   const [agents, setAgents] = useState<AgentCardData[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterState>({
-    search: '',
+    search: "",
     category: null,
     status: null,
-    sortBy: 'name',
-    sortOrder: 'asc',
+    sortBy: "name",
+    sortOrder: "asc",
   });
   const [modal, setModal] = useState<ModalState>({
     isOpen: false,
@@ -45,26 +45,28 @@ export const AgentDashboard: React.FC = () => {
           config: instance.config,
           state: instance.state,
           sessionCount: 0,
-          lastActive: instance.lastHeartbeat || instance.config.createdAt || new Date().toISOString(),
+          lastActive:
+            instance.lastHeartbeat || instance.config.createdAt || new Date().toISOString(),
           health: calculateHealth(instance.state),
         };
       });
       setAgents(agentData);
     } catch (error) {
-      console.error('Failed to load agents:', error);
+      console.error("Failed to load agents:", error);
     } finally {
       setLoading(false);
     }
   }, []);
 
   // Calculate agent health based on state
-  const calculateHealth = (state?: AgentState): AgentCardData['health'] => {
-    if (!state) return 'unknown';
-    if (state === AgentState.ERROR) return 'error';
-    if (state === AgentState.ACTIVE || state === AgentState.THINKING || state === AgentState.ACTING) return 'healthy';
-    if (state === AgentState.IDLE) return 'healthy';
-    if (state === AgentState.WAITING || state === AgentState.SUSPENDED) return 'warning';
-    return 'unknown';
+  const calculateHealth = (state?: AgentState): AgentCardData["health"] => {
+    if (!state) return "unknown";
+    if (state === AgentState.ERROR) return "error";
+    if (state === AgentState.ACTIVE || state === AgentState.THINKING || state === AgentState.ACTING)
+      return "healthy";
+    if (state === AgentState.IDLE) return "healthy";
+    if (state === AgentState.WAITING || state === AgentState.SUSPENDED) return "warning";
+    return "unknown";
   };
 
   // Filter and sort agents
@@ -78,7 +80,7 @@ export const AgentDashboard: React.FC = () => {
         (agent) =>
           agent.config.name.toLowerCase().includes(searchLower) ||
           agent.config.role.toLowerCase().includes(searchLower) ||
-          agent.config.id.toLowerCase().includes(searchLower)
+          agent.config.id.toLowerCase().includes(searchLower),
       );
     }
 
@@ -91,19 +93,18 @@ export const AgentDashboard: React.FC = () => {
     result.sort((a, b) => {
       let comparison = 0;
       switch (filter.sortBy) {
-        case 'name':
+        case "name":
           comparison = a.config.name.localeCompare(b.config.name);
           break;
-        case 'date':
+        case "date":
           comparison =
-            new Date(b.lastActive || 0).getTime() -
-            new Date(a.lastActive || 0).getTime();
+            new Date(b.lastActive || 0).getTime() - new Date(a.lastActive || 0).getTime();
           break;
-        case 'usage':
+        case "usage":
           comparison = b.sessionCount - a.sessionCount;
           break;
       }
-      return filter.sortOrder === 'asc' ? comparison : -comparison;
+      return filter.sortOrder === "asc" ? comparison : -comparison;
     });
 
     return result;
@@ -111,29 +112,29 @@ export const AgentDashboard: React.FC = () => {
 
   // Create new agent
   const handleCreateAgent = useCallback(() => {
-    setModal({ isOpen: true, type: 'create' });
+    setModal({ isOpen: true, type: "create" });
   }, []);
 
   // Edit agent
   const handleEditAgent = useCallback((agent: AgentConfig) => {
     setSelectedAgent(agent);
-    setModal({ isOpen: true, type: 'edit' });
+    setModal({ isOpen: true, type: "edit" });
   }, []);
 
   // Delete agent
   const handleDeleteAgent = useCallback(
     async (agentId: string) => {
-      if (window.confirm('Are you sure you want to delete this agent?')) {
+      if (window.confirm("Are you sure you want to delete this agent?")) {
         try {
           await agentManager.terminateAgent(agentId); // Corrected method
           await loadAgents();
         } catch (error) {
-          console.error('Failed to delete agent:', error);
-          alert('Failed to delete agent');
+          console.error("Failed to delete agent:", error);
+          alert("Failed to delete agent");
         }
       }
     },
-    [loadAgents]
+    [loadAgents],
   );
 
   // Pause/Resume agent
@@ -147,32 +148,32 @@ export const AgentDashboard: React.FC = () => {
         }
         await loadAgents();
       } catch (error) {
-        console.error('Failed to toggle agent:', error);
+        console.error("Failed to toggle agent:", error);
       }
     },
-    [loadAgents]
+    [loadAgents],
   );
 
   // Get role badge color
   const getRoleColor = (role: AgentRole): string => {
     const colors: Record<AgentRole, string> = {
-      operator: 'bg-blue-500',
-      developer: 'bg-green-500',
-      analyst: 'bg-yellow-500',
-      manager: 'bg-purple-500',
-      creator: 'bg-pink-500',
-      admin: 'bg-red-500',
+      operator: "bg-blue-500",
+      developer: "bg-green-500",
+      analyst: "bg-yellow-500",
+      manager: "bg-purple-500",
+      creator: "bg-pink-500",
+      admin: "bg-red-500",
     };
-    return colors[role] || 'bg-gray-500';
+    return colors[role] || "bg-gray-500";
   };
 
   // Get health badge
-  const getHealthBadge = (health: AgentCardData['health']) => {
+  const getHealthBadge = (health: AgentCardData["health"]) => {
     const configs = {
-      healthy: { label: 'Healthy', className: 'badge-success' },
-      warning: { label: 'Idle', className: 'badge-warning' },
-      error: { label: 'Error', className: 'badge-error' },
-      unknown: { label: 'Unknown', className: 'badge-info' },
+      healthy: { label: "Healthy", className: "badge-success" },
+      warning: { label: "Idle", className: "badge-warning" },
+      error: { label: "Error", className: "badge-error" },
+      unknown: { label: "Unknown", className: "badge-info" },
     };
     return configs[health];
   };
@@ -218,7 +219,7 @@ export const AgentDashboard: React.FC = () => {
         />
         <StatCard
           label="Errors"
-          value={agents.filter((a) => a.health === 'error').length}
+          value={agents.filter((a) => a.health === "error").length}
           icon="⚠️"
           color="text-red-500"
         />
@@ -226,7 +227,47 @@ export const AgentDashboard: React.FC = () => {
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        {/* ... (Filters code same as before, simplified for brevity) ... */}
+        <div className="relative flex-1">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]">
+            🔍
+          </span>
+          <input
+            type="text"
+            value={filter.search}
+            onChange={(e) => setFilter((prev) => ({ ...prev, search: e.target.value }))}
+            placeholder="Search agents..."
+            className="w-full pl-10 pr-4 py-2 input"
+          />
+        </div>
+
+        <select
+          value={filter.status || ""}
+          onChange={(e) => setFilter((prev) => ({ ...prev, status: e.target.value || null }))}
+          className="select"
+        >
+          <option value="">All Status</option>
+          <option value={AgentState.ACTIVE}>Active</option>
+          <option value={AgentState.IDLE}>Idle</option>
+          <option value={AgentState.SUSPENDED}>Suspended</option>
+          <option value={AgentState.ERROR}>Error</option>
+        </select>
+
+        <select
+          value={`${filter.sortBy}-${filter.sortOrder}`}
+          onChange={(e) => {
+            const [sortBy, sortOrder] = e.target.value.split("-") as [
+              FilterState["sortBy"],
+              FilterState["sortOrder"],
+            ];
+            setFilter((prev) => ({ ...prev, sortBy, sortOrder }));
+          }}
+          className="select"
+        >
+          <option value="name-asc">Name A-Z</option>
+          <option value="name-desc">Name Z-A</option>
+          <option value="date-desc">Recently Active</option>
+          <option value="usage-desc">Most Used</option>
+        </select>
       </div>
 
       {/* Agents Grid */}
@@ -242,9 +283,7 @@ export const AgentDashboard: React.FC = () => {
               healthBadge={getHealthBadge(agent.health)}
               onEdit={() => handleEditAgent(agent.config)}
               onDelete={() => handleDeleteAgent(agent.config.id)}
-              onToggle={() =>
-                handleToggleAgent(agent.config.id, agent.state || AgentState.IDLE)
-              }
+              onToggle={() => handleToggleAgent(agent.config.id, agent.state || AgentState.IDLE)}
             />
           ))}
         </div>
@@ -268,42 +307,102 @@ export const AgentDashboard: React.FC = () => {
 
 // ... (StatCard, EmptyState components same as before)
 
-const AgentCard: React.FC<any> = ({ agent, roleColor, healthBadge, onEdit, onDelete, onToggle }) => {
+const AgentCard: React.FC<any> = ({
+  agent,
+  roleColor,
+  healthBadge,
+  onEdit,
+  onDelete,
+  onToggle,
+}) => {
   const isRunning = agent.state === AgentState.ACTIVE || agent.state === AgentState.THINKING;
-  
+
   return (
     <div className="card-hover group">
-      {/* ... (Card implementation) ... */}
-      <div className="flex gap-2 mt-4">
+      {/* Header: role dot + name + health badge */}
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <div className={`w-3 h-3 rounded-full flex-shrink-0 mt-1 ${roleColor}`} />
+          <div>
+            <h3 className="font-semibold truncate max-w-[160px]">{agent.config.name}</h3>
+            <p className="text-xs text-[var(--color-text-muted)] capitalize">{agent.config.role}</p>
+          </div>
+        </div>
+        <span className={healthBadge.className}>{healthBadge.label}</span>
+      </div>
+
+      {/* Model + workspace */}
+      <div className="text-sm text-[var(--color-text-muted)] mb-3 space-y-1">
+        <div className="flex items-center gap-2 truncate">
+          <span>🧠</span>
+          <span className="truncate">{agent.config.model}</span>
+        </div>
+        <div className="flex items-center gap-2 truncate">
+          <span>📁</span>
+          <span className="truncate">{agent.config.workspace}</span>
+        </div>
+      </div>
+
+      {/* Capability badges (up to 3) */}
+      {agent.config.capabilities.length > 0 && (
+        <div className="flex flex-wrap gap-1 mb-3">
+          {agent.config.capabilities.slice(0, 3).map((cap: string) => (
+            <span
+              key={cap}
+              className="badge bg-[var(--color-surface-hover)] text-[var(--color-text-muted)] capitalize"
+            >
+              {cap}
+            </span>
+          ))}
+          {agent.config.capabilities.length > 3 && (
+            <span className="badge bg-[var(--color-surface-hover)] text-[var(--color-text-muted)]">
+              +{agent.config.capabilities.length - 3}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Meta: skills, tools, last active */}
+      <div className="flex items-center justify-between text-xs text-[var(--color-text-muted)] mb-4">
+        <div className="flex gap-3">
+          <span title="Skills">🎯 {agent.config.skills.length}</span>
+          <span title="Tools">🔧 {agent.config.tools.length}</span>
+        </div>
+        <span title="Last active">
+          {agent.lastActive ? new Date(agent.lastActive).toLocaleDateString() : "—"}
+        </span>
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-2">
         <button onClick={onToggle} className="btn-secondary flex-1">
-          {isRunning ? 'Pause' : 'Start'}
+          {isRunning ? "Pause" : "Start"}
         </button>
-        <button onClick={onEdit} className="btn-secondary">✏️</button>
-        <button onClick={onDelete} className="btn-secondary text-red-500">🗑️</button>
+        <button onClick={onEdit} className="btn-secondary" title="Edit">
+          ✏️
+        </button>
+        <button onClick={onDelete} className="btn-secondary text-red-500" title="Delete">
+          🗑️
+        </button>
       </div>
     </div>
   );
 };
 
 interface AgentModalProps {
-  type: 'create' | 'edit' | 'delete' | 'confirm' | null;
+  type: "create" | "edit" | "delete" | "confirm" | null;
   agent: AgentConfig | null;
   onClose: () => void;
   onSave: () => void;
 }
 
-const AgentModal: React.FC<AgentModalProps> = ({
-  type,
-  agent,
-  onClose,
-  onSave,
-}) => {
+const AgentModal: React.FC<AgentModalProps> = ({ type, agent, onClose, onSave }) => {
   const [formData, setFormData] = useState<Partial<AgentConfig>>({
-    name: '',
+    name: "",
     role: AgentRole.DEVELOPER,
-    model: 'llama3.2',
+    model: "llama3.2",
     capabilities: [AgentCapability.REASONING],
-    workspace: './workspace',
+    workspace: "./workspace",
     skills: [],
     tools: [],
     ...agent,
@@ -312,33 +411,37 @@ const AgentModal: React.FC<AgentModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (type === 'create') {
+      if (type === "create") {
         await agentManager.spawnAgent(formData as AgentConfig);
-      } else if (type === 'edit' && agent) {
+      } else if (type === "edit" && agent) {
         // Mock update for now
-        console.log('Update agent', formData);
+        console.log("Update agent", formData);
       }
       onSave();
       onClose();
     } catch (error) {
-      console.error('Failed to save agent:', error);
+      console.error("Failed to save agent:", error);
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
       <div className="bg-[var(--color-surface)] p-6 rounded-lg w-full max-w-lg">
-        <h2 className="text-xl font-bold mb-4">{type === 'create' ? 'Create' : 'Edit'} Agent</h2>
+        <h2 className="text-xl font-bold mb-4">{type === "create" ? "Create" : "Edit"} Agent</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input 
-            className="input w-full" 
+          <input
+            className="input w-full"
             placeholder="Agent Name"
             value={formData.name}
-            onChange={e => setFormData({...formData, name: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
-            <button type="submit" className="btn-primary">Save</button>
+            <button type="button" onClick={onClose} className="btn-secondary">
+              Cancel
+            </button>
+            <button type="submit" className="btn-primary">
+              Save
+            </button>
           </div>
         </form>
       </div>
