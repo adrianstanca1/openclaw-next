@@ -4,6 +4,18 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
+  define: {
+    "process.env.VITE_GATEWAY_URL": JSON.stringify(process.env.VITE_GATEWAY_URL || "ws://localhost:18789"),
+    "process.env.VITE_GATEWAY_TOKEN": JSON.stringify(process.env.VITE_GATEWAY_TOKEN || ""),
+    "process.env.VITE_OLLAMA_ENDPOINT": JSON.stringify(process.env.VITE_OLLAMA_ENDPOINT || "http://localhost:11434"),
+    "process.env.VITE_OLLAMA_MODEL": JSON.stringify(process.env.VITE_OLLAMA_MODEL || "llama3.2"),
+    "process.env.VITE_OLLAMA_CLOUD_ENABLED": JSON.stringify(process.env.VITE_OLLAMA_CLOUD_ENABLED || "false"),
+    "process.env.VITE_OLLAMA_CLOUD_API_KEY": JSON.stringify(process.env.VITE_OLLAMA_CLOUD_API_KEY || ""),
+    "process.env.VITE_OPENAI_API_KEY": JSON.stringify(process.env.VITE_OPENAI_API_KEY || ""),
+    "process.env.VITE_ANTHROPIC_API_KEY": JSON.stringify(process.env.VITE_ANTHROPIC_API_KEY || ""),
+    "process.env.VITE_GROQ_API_KEY": JSON.stringify(process.env.VITE_GROQ_API_KEY || ""),
+    "process.env.VITE_DEBUG": JSON.stringify(process.env.VITE_DEBUG || "false"),
+  },
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
