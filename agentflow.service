@@ -1,0 +1,19 @@
+[Unit]
+Description=AgentFlow - OpenClaw Next Agentic Gateway Control Panel
+After=network.target
+
+[Service]
+Type=simple
+User=agentflow
+WorkingDirectory=/opt/agentflow
+Environment=NODE_ENV=production
+EnvironmentFile=/opt/agentflow/.env
+ExecStart=/usr/bin/node /opt/agentflow/dist-cli/cli/index.js serve
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=agentflow
+
+[Install]
+WantedBy=multi-user.target
