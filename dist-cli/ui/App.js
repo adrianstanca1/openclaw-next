@@ -2,6 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // OpenClaw Next - Main App Component
 // Root application component with routing and state management
 import { useState, useEffect, useCallback } from "react";
+import { configManager } from "../core/config.js";
 import { AgentDashboard } from "../views/AgentDashboard.js";
 import { GovernanceDashboard } from "../views/governance/GovernanceDashboard.js";
 import { PluginsView } from "../views/PluginsView.js";
@@ -23,7 +24,7 @@ import { Webhooks } from "./pages/governance/Webhooks.js";
  * Main App Component
  */
 export const App = () => {
-    const [isSetupComplete, setIsSetupComplete] = useState(true);
+    const [isSetupComplete, setIsSetupComplete] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [currentView, setCurrentView] = useState("dashboard");
     const [error, setError] = useState(null);
@@ -32,10 +33,10 @@ export const App = () => {
         const checkSetup = async () => {
             try {
                 setIsLoading(true);
-                // configManager is server-side only, skip in browser
-                // await configManager.load();
-                // Skip setup check - always show dashboard
-                setIsSetupComplete(true);
+                await configManager.load();
+                const config = configManager.get();
+                const hasRequiredConfig = config.ollama?.local?.endpoint || config.ollama?.cloud?.enabled;
+                setIsSetupComplete(Boolean(hasRequiredConfig && config.ollama?.enabled));
             }
             catch (err) {
                 setError(err instanceof Error ? err.message : "Failed to initialize app");
