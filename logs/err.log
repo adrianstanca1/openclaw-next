@@ -1,0 +1,119 @@
+2026-02-26 23:46:23 +00:00: (node:414670) Warning: Failed to load the ES module: /var/www/openclaw-next/dist-cli/cli/index.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+2026-02-26 23:46:23 +00:00: (Use `node --trace-warnings ...` to show where the warning was created)
+2026-02-26 23:46:23 +00:00: /var/www/openclaw-next/dist-cli/cli/index.js:5
+2026-02-26 23:46:23 +00:00: import { AgentManager } from "../agents/manager.js";
+2026-02-26 23:46:23 +00:00: ^^^^^^
+2026-02-26 23:46:23 +00:00: 
+2026-02-26 23:46:23 +00:00: SyntaxError: Cannot use import statement outside a module
+2026-02-26 23:46:23 +00:00:     at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+2026-02-26 23:46:23 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1786:20)
+2026-02-26 23:46:23 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:23 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:23 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:23 +00:00:     at Object.<anonymous> (/usr/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2026-02-26 23:46:23 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1812:14)
+2026-02-26 23:46:23 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:23 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:23 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:26 +00:00: (node:414685) Warning: Failed to load the ES module: /var/www/openclaw-next/dist-cli/cli/index.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+2026-02-26 23:46:26 +00:00: (Use `node --trace-warnings ...` to show where the warning was created)
+2026-02-26 23:46:26 +00:00: /var/www/openclaw-next/dist-cli/cli/index.js:5
+2026-02-26 23:46:26 +00:00: import { AgentManager } from "../agents/manager.js";
+2026-02-26 23:46:26 +00:00: ^^^^^^
+2026-02-26 23:46:26 +00:00: 
+2026-02-26 23:46:26 +00:00: SyntaxError: Cannot use import statement outside a module
+2026-02-26 23:46:26 +00:00:     at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+2026-02-26 23:46:26 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1786:20)
+2026-02-26 23:46:26 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:26 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:26 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:26 +00:00:     at Object.<anonymous> (/usr/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2026-02-26 23:46:26 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1812:14)
+2026-02-26 23:46:26 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:26 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:26 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:29 +00:00: (node:414696) Warning: Failed to load the ES module: /var/www/openclaw-next/dist-cli/cli/index.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+2026-02-26 23:46:29 +00:00: (Use `node --trace-warnings ...` to show where the warning was created)
+2026-02-26 23:46:29 +00:00: /var/www/openclaw-next/dist-cli/cli/index.js:5
+2026-02-26 23:46:29 +00:00: import { AgentManager } from "../agents/manager.js";
+2026-02-26 23:46:29 +00:00: ^^^^^^
+2026-02-26 23:46:29 +00:00: 
+2026-02-26 23:46:29 +00:00: SyntaxError: Cannot use import statement outside a module
+2026-02-26 23:46:29 +00:00:     at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+2026-02-26 23:46:29 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1786:20)
+2026-02-26 23:46:29 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:29 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:29 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:29 +00:00:     at Object.<anonymous> (/usr/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2026-02-26 23:46:29 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1812:14)
+2026-02-26 23:46:29 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:29 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:29 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:32 +00:00: (node:414768) Warning: Failed to load the ES module: /var/www/openclaw-next/dist-cli/cli/index.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+2026-02-26 23:46:32 +00:00: (Use `node --trace-warnings ...` to show where the warning was created)
+2026-02-26 23:46:32 +00:00: /var/www/openclaw-next/dist-cli/cli/index.js:5
+2026-02-26 23:46:32 +00:00: import { AgentManager } from "../agents/manager.js";
+2026-02-26 23:46:32 +00:00: ^^^^^^
+2026-02-26 23:46:32 +00:00: 
+2026-02-26 23:46:32 +00:00: SyntaxError: Cannot use import statement outside a module
+2026-02-26 23:46:32 +00:00:     at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+2026-02-26 23:46:32 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1786:20)
+2026-02-26 23:46:32 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:32 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:32 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:32 +00:00:     at Object.<anonymous> (/usr/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2026-02-26 23:46:32 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1812:14)
+2026-02-26 23:46:32 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:32 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:32 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:35 +00:00: (node:414779) Warning: Failed to load the ES module: /var/www/openclaw-next/dist-cli/cli/index.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+2026-02-26 23:46:35 +00:00: (Use `node --trace-warnings ...` to show where the warning was created)
+2026-02-26 23:46:35 +00:00: /var/www/openclaw-next/dist-cli/cli/index.js:5
+2026-02-26 23:46:35 +00:00: import { AgentManager } from "../agents/manager.js";
+2026-02-26 23:46:35 +00:00: ^^^^^^
+2026-02-26 23:46:35 +00:00: 
+2026-02-26 23:46:35 +00:00: SyntaxError: Cannot use import statement outside a module
+2026-02-26 23:46:35 +00:00:     at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+2026-02-26 23:46:35 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1786:20)
+2026-02-26 23:46:35 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:35 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:35 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:35 +00:00:     at Object.<anonymous> (/usr/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2026-02-26 23:46:35 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1812:14)
+2026-02-26 23:46:35 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:35 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:35 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:38 +00:00: (node:414830) Warning: Failed to load the ES module: /var/www/openclaw-next/dist-cli/cli/index.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+2026-02-26 23:46:38 +00:00: (Use `node --trace-warnings ...` to show where the warning was created)
+2026-02-26 23:46:38 +00:00: /var/www/openclaw-next/dist-cli/cli/index.js:5
+2026-02-26 23:46:38 +00:00: import { AgentManager } from "../agents/manager.js";
+2026-02-26 23:46:38 +00:00: ^^^^^^
+2026-02-26 23:46:38 +00:00: 
+2026-02-26 23:46:38 +00:00: SyntaxError: Cannot use import statement outside a module
+2026-02-26 23:46:38 +00:00:     at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+2026-02-26 23:46:38 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1786:20)
+2026-02-26 23:46:38 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:38 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:38 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:38 +00:00:     at Object.<anonymous> (/usr/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2026-02-26 23:46:38 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1812:14)
+2026-02-26 23:46:38 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:38 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:38 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:42 +00:00: (node:414841) Warning: Failed to load the ES module: /var/www/openclaw-next/dist-cli/cli/index.js. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+2026-02-26 23:46:42 +00:00: (Use `node --trace-warnings ...` to show where the warning was created)
+2026-02-26 23:46:42 +00:00: /var/www/openclaw-next/dist-cli/cli/index.js:5
+2026-02-26 23:46:42 +00:00: import { AgentManager } from "../agents/manager.js";
+2026-02-26 23:46:42 +00:00: ^^^^^^
+2026-02-26 23:46:42 +00:00: 
+2026-02-26 23:46:42 +00:00: SyntaxError: Cannot use import statement outside a module
+2026-02-26 23:46:42 +00:00:     at wrapSafe (node:internal/modules/cjs/loader:1743:18)
+2026-02-26 23:46:42 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1786:20)
+2026-02-26 23:46:42 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:42 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:42 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
+2026-02-26 23:46:42 +00:00:     at Object.<anonymous> (/usr/lib/node_modules/pm2/lib/ProcessContainerFork.js:33:23)
+2026-02-26 23:46:42 +00:00:     at Module._compile (node:internal/modules/cjs/loader:1812:14)
+2026-02-26 23:46:42 +00:00:     at Object..js (node:internal/modules/cjs/loader:1943:10)
+2026-02-26 23:46:42 +00:00:     at Module.load (node:internal/modules/cjs/loader:1533:32)
+2026-02-26 23:46:42 +00:00:     at Module._load (node:internal/modules/cjs/loader:1335:12)
