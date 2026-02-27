@@ -5,7 +5,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   define: {
-    "process.env.VITE_GATEWAY_URL": JSON.stringify(process.env.VITE_GATEWAY_URL || "ws://localhost:18789"),
+    "process.env.VITE_GATEWAY_URL": JSON.stringify(process.env.VITE_GATEWAY_URL || "wss://localhost:18789"),
     "process.env.VITE_GATEWAY_TOKEN": JSON.stringify(process.env.VITE_GATEWAY_TOKEN || ""),
     "process.env.VITE_OLLAMA_ENDPOINT": JSON.stringify(process.env.VITE_OLLAMA_ENDPOINT || "http://localhost:11434"),
     "process.env.VITE_OLLAMA_MODEL": JSON.stringify(process.env.VITE_OLLAMA_MODEL || "llama3.2"),
