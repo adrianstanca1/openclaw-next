@@ -1,0 +1,11 @@
+{
+  "name": "openclaw-next-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Frontend build wrapper for OpenClaw Next",
+  "scripts": {
+    "build": "npm --prefix .. run build",
+    "dev": "npm --prefix .. run dev",
+    "preview": "npm --prefix .. run preview"
+  }
+}
