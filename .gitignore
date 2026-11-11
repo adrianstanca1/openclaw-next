@@ -35,3 +35,7 @@ yarn.lock
 # Cache
 .cache/
 .parcel-cache/
+
+# Local environment variants; keep the safe template only
+.env.*
+!.env.example
