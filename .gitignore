@@ -35,3 +35,4 @@ yarn.lock
 # Cache
 .cache/
 .parcel-cache/
+!.env.example
